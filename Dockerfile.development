@@ -1,0 +1,32 @@
+FROM ruby:2.6.4-alpine3.10
+
+RUN \
+	# 実行時に必要なパッケージ。
+	apk add \
+		libressl2.7-libssl \
+		mariadb-connector-c \
+		nodejs \
+		tzdata \
+		yarn \
+	\
+	# ビルド時にのみ必要なパッケージ。
+	# 開発用の Dockerfile であるため、常に入れておく。
+	&& apk add --virtual .build-deps \
+		build-base \
+		mariadb-dev \
+	\
+	# apk キャッシュを削除。
+	&& rm -rf /var/cache/apk/* \
+	\
+	# タイムゾーンは全体的に Asia/Tokyo に統一する。
+	&& cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+	\
+	# 実行ユーザ appname を作成。
+	&& mkdir -p /home/appname \
+	&& addgroup -S appname \
+	&& adduser -DSh /home/appname -s /sbin/nologin -G appname appname \
+	&& chmod 700 /home/appname \
+	&& chown appname:appname /home/appname
+
+WORKDIR /var/www/appname
+USER appname

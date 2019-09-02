@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  app:
+    #environment:
+    #  #SOME_SECRET_ENV_VAR: XXX
+    #  #ANOTHER_SECRET_ENV_VAR: XXX
+    #  #OVERRIDING_DEFAULT_ENV_VAR: XXX
+    #
+    #  # Rails 開発用。
+    #  # ホスト OS が Windows である場合等、ファイルの更新が Rails
+    #  # に正常に反映されない場合、 'true' を設定する。
+    #  # see config/environments/development.rb
+    #  ##DISABLE_FILE_WATCH: 'true'
+    ports:
+      - "3000:3000"
+  mailhog:
+    ports:
+      - "8025:8025"
+  mysql:
+    ports:
+      - "3306:3306"

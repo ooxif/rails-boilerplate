@@ -1,0 +1,49 @@
+# 開発環境用。本番環境では使わないこと。
+
+version: '2'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    command: >
+        sh -c
+        'bundle --path=vendor/bundle -j4
+        && rm -f tmp/pids/server.pid
+        && bin/rails s -b 0.0.0.0'
+    environment:
+      BUNDLE_APP_CONFIG:
+      BUNDLE_BIN:
+      BUNDLE_PATH:
+      GEM_HOME:
+      DATABASE_HOST: mysql
+      DATABASE_NAME: appname
+      DATABASE_PASSWORD: appname
+      DATABASE_USERNAME: appname
+      RAILS_ENV: development
+      SMTP_ADDRESS: mailhog
+      SMTP_DOMAIN: mailhog
+      SMTP_PORT: 1025
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/var/www/appname
+  data:
+    image: busybox:1.31.0
+    volumes:
+      - mysql:/var/lib/mysql
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+  mysql:
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Tokyo
+    image: mysql:5.7.27
+    volumes:
+      - ./containers/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    volumes_from:
+      - data
+volumes:
+  mysql:
+    driver: local

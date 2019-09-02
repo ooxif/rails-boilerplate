@@ -1,0 +1,2 @@
+CREATE DATABASE appname_development DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+CREATE DATABASE appname_test DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;

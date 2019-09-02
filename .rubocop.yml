@@ -1,0 +1,24 @@
+AllCops:
+  Exclude:
+    - bin/**/*
+    - db/schema.rb
+    - node_modules/**/*
+    - vendor/**/*
+  Include:
+    - Gemfile
+Metrics/AbcSize:
+  Exclude:
+    - db/migrate/**/*
+Metrics/BlockLength:
+  Exclude:
+    - db/migrate/**/*
+    - spec/**/*
+Metrics/MethodLength:
+  Exclude:
+    - db/migrate/**/*
+Rails:
+  Enabled: true
+Style/AsciiComments:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
