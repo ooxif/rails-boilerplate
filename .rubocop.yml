@@ -1,11 +1,10 @@
 AllCops:
   Exclude:
+    - .git/**/*
     - bin/**/*
     - db/schema.rb
     - node_modules/**/*
     - vendor/**/*
-  Include:
-    - Gemfile
 Metrics/AbcSize:
   Exclude:
     - db/migrate/**/*
