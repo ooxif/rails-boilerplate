@@ -37,21 +37,26 @@
     なお Rails v6.0.0 では、 -G オプションを指定しても .gitignore に内容が
     追加されてしまい、その内容が重複してしまっているので、
     `git checkout -- .gitignore` で元に戻します。
-5. `config/application.example.rb` の設定例を `config/application.rb` に、
+5. `docker-compose run --rm app bundle exec rails g rspec:install` で rspec を
+   初期化します。  
+   spec ディレクトリが作成されます。  
+   なお今後 test ディレクトリは使用しないため、 `rm -rf test` でディレクトリを
+   削除します。
+6. `config/application.example.rb` の設定例を `config/application.rb` に、
    `config/environments/development.example.rb` の設定例を
    `config/environments/development.rb` に適切にコピーします。  
    その後、これらの 2 つの .example.rb ファイルは削除します。
-6. `docker-compose.override.example.yml` を `docker-compose.override.yml`
+7. `docker-compose.override.example.yml` を `docker-compose.override.yml`
    としてコピーします。  
    必要に応じて内容を編集してください。
-7. `docker-compose up` で各種コンテナを起動します。  
+8. `docker-compose up` で各種コンテナを起動します。  
    `Puma starting in single mode...` ～ `Use Ctrl-C to stop` が表示されたら
    起動完了です。
-8. http://localhost:3000 にアクセスし Rails の画面が表示されたら
+9. http://localhost:3000 にアクセスし Rails の画面が表示されたら
    動作確認完了です。
-9. `.git` ディレクトリを削除し、新たに git を初期化します。  
+10. `.git` ディレクトリを削除し、新たに git を初期化します。  
    `rm -rf .git && git init .` で可能です。
-10. `git add .` `git commit -m 'init'` し、初期化時の状態をコミットします。
+11. `git add .` `git commit -m 'init'` し、初期化時の状態をコミットします。
 
 <a name="rails-commands">
 
