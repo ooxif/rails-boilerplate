@@ -44,12 +44,14 @@
 6. `docker-compose.override.example.yml` を `docker-compose.override.yml`
    としてコピーします。  
    必要に応じて内容を編集してください。
-5. `docker-compose up` で各種コンテナを起動します。  
+7. `docker-compose up` で各種コンテナを起動します。  
    `Puma starting in single mode...` ～ `Use Ctrl-C to stop` が表示されたら
    起動完了です。
-6. http://localhost:3000 にアクセスし Rails の画面が表示されたら
+8. http://localhost:3000 にアクセスし Rails の画面が表示されたら
    動作確認完了です。
-7. `git add .` `git commit -m 'init'` し、初期化時の状態をコミットします。
+9. `.git` ディレクトリを削除し、新たに git を初期化します。  
+   `rm -rf .git && git init .` で可能です。
+10. `git add .` `git commit -m 'init'` し、初期化時の状態をコミットします。
 
 <a name="rails-commands">
 
