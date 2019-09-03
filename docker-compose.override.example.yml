@@ -13,10 +13,10 @@ services:
     #  # see config/environments/development.rb
     #  ##DISABLE_FILE_WATCH: 'true'
     ports:
-      - "3000:3000"
+      - '3000:3000'
   mailhog:
     ports:
-      - "8025:8025"
+      - '8025:8025'
   mysql:
     ports:
-      - "3306:3306"
+      - '3306:3306'
