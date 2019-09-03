@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # 省略
 
 module Appname
@@ -16,6 +18,6 @@ module Appname
     # config/environments/*.rb で設定してもいい。
     config.action_mailer.smtp_settings = config_for(:smtp)
                                          .transform_keys(&:to_sym)
-    #config.action_mailer.delivery_method = :smtp
+    # config.action_mailer.delivery_method = :smtp
   end
 end

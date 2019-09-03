@@ -20,11 +20,10 @@ gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 4.0'
 
 # Custom gems
-#gem 'devise'
 
 group :development, :test do
   # Rails gems
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
 
   # Custom gems
   gem 'rspec'
