@@ -2,7 +2,11 @@ FROM ruby:2.6.4-alpine3.10
 
 RUN \
 	# 実行時に必要なパッケージ。
+	#
+	# git は変更されたファイルを検出して lint する場合などのために使う。
+	# 本番環境では利用しない。
 	apk add \
+		git \
 		libressl2.7-libssl \
 		mariadb-connector-c \
 		nodejs \

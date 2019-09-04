@@ -1,0 +1,48 @@
+{
+  "dependencies": {
+    "@rails/actioncable": "^6.0.0-alpha",
+    "@rails/activestorage": "^6.0.0-alpha",
+    "@rails/ujs": "^6.0.0-alpha",
+    "@rails/webpacker": "^4.0.7",
+    "turbolinks": "^5.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.2.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.18.2",
+    "run-with-changes": "^1.0.1",
+    "stylelint": "^10.1.0",
+    "stylelint-config-prettier": "^5.2.0",
+    "stylelint-config-recommended-scss": "^3.3.0",
+    "stylelint-order": "^3.1.0",
+    "stylelint-prettier": "^1.1.1",
+    "stylelint-scss": "^3.10.0",
+    "webpack-dev-server": "^3.8.0"
+  },
+  "name": "appname",
+  "private": true,
+  "scripts": {
+    "eslint": "eslint",
+    "fic": "run-with-changes iwu -r fic:css \"*.{css,scss}\" -r fic:js \"*.js\" -r fic:json \"*.json\"",
+    "fic:css": "stylelint --fix",
+    "fic:js": "eslint --fix",
+    "fic:json": "prettier --write",
+    "fix": "run-p fix:css fix:js fix:json",
+    "fix:css": "stylelint --fix \"**/*.{css,scss}\"",
+    "fix:js": "eslint --fix \"**/*.js\"",
+    "fix:json": "prettier --write \"**/*.json\"",
+    "linc": "run-with-changes iwu -r linc:css \"*.{css,scss}\" -r linc:js \"*.js\" -r linc:json \"*.json\"",
+    "linc:css": "stylelint",
+    "linc:js": "eslint",
+    "linc:json": "prettier -l",
+    "lint": "run-p lint:css lint:js lint:json",
+    "lint:css": "stylelint \"**/*.{css,scss}\"",
+    "lint:js": "eslint \"**/*.js\"",
+    "lint:json": "prettier -l \"**/*.json\"",
+    "prettier": "prettier",
+    "stylelint": "stylelint"
+  },
+  "version": "0.1.0"
+}

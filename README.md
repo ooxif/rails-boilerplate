@@ -9,6 +9,7 @@
 - [プロジェクトの運用について](#rules)
     - [docker-compose.yml の変更および docker-compose.override.yml について](#rules-docker)
     - [RuboCop の設定 .rubocop.yml について](#rules-rubocop)
+    - [Javascript / CSS のリンティングについて](#rules-js-css)
 
 <a name="env-vars">
 
@@ -203,3 +204,45 @@ test:
 
 RuboCop の設定がプロジェクトの状況に合わない場合にのみ (好みが理由ではなく)、
 .rubocop.yml を変更します。
+
+<a name="rules-js-css">
+
+### Javascript / CSS のリンティングについて
+
+以下のツールを利用します。
+
+- [ESLint](https://eslint.org/)
+  - .js のリンティング/フォーマットに利用します。
+  - 推奨設定 (eslint:recommended plugin:prettier/recommended) を利用します。
+- [stylelint](https://stylelint.io/)
+  - .css .scss のリンティング/フォーマットに利用します。
+  - 推奨設定 (stylelint-prettier/recommended stylelint-config-recommended-scss)
+    およびプロパティのA-Z順並び替えルール (order/properties-alphabetical-order)
+    を利用します。
+- [prettier](https://prettier.io/)
+  - .json のリンティング/フォーマットに利用します。
+  - デフォルトの設定を利用します。
+
+.css .js .json .scss の lint は `yarn` コマンドで実行します。  
+`yarn` コマンドは `Spring` のような効率化の処理はないので、
+app のシェルに入ってコマンドを実行してもいいですし、
+`docker-compose exec` `docker-compose run` で実行しても変わりはありません。
+
+```sh
+# 全ての .css .js .json .scss に対して lint を実行します。
+yarn lint
+
+# .css .js .json .scss のうち、変更したファイルだけに対して lint を実行します。
+yarn linc
+
+# 指定したファイルのみ lint します。
+yarn linc:css some-css-file.css
+yarn linc:js some-js-file.js
+yarn linc:json some-json-file.json
+
+# lint となっている箇所を fix 、 linc となっている箇所を fic とすると、
+# 自動的に修正されます。 (自動修正が可能である項目のみ)
+```
+
+RuboCop 同様、プロジェクトの状況に合わない場合にのみ、
+それぞれの設定を変更します。
