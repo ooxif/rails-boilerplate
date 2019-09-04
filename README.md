@@ -3,7 +3,8 @@
 - [環境変数](#env-vars)
 - [使い方](#how-to-use)
 - [rails / rubocop / rspec などのコマンドの実行方法について](#rails-commands)
-- [MySQL へのログインについて](#mysql)
+- [MySQL へのログインについて](#mysql-cli)
+- [MySQL のユーザ/デターベースについて](#mysql-naming)
 - [Rails から送信されるメールについて](#smtp)
 - [プロジェクトの運用について](#rules)
     - [docker-compose.yml の変更および docker-compose.override.yml について](#rules-docker)
@@ -75,12 +76,70 @@ app のシェルに入り、その中で `bin/rails` `bin/rubocop` などのコ�
 `Spring` による連続実行の速度改善の恩恵を受けるためにも、
 app のシェルに入ったほうが作業効率は良いです。
 
-<a name="mysql">
+<a name="mysql-cli">
 
 ## MySQL へのログインについて
 
 コンテナを起動させ、 `docker-compose exec mysql mysql -uroot -proot` で
 ログインできます。
+
+<a name="mysql-naming">
+
+## MySQL のユーザ/デターベースについて
+
+> 以下 appname となっている箇所は、使い方の 2 によってアプリケーション名に
+> 置換されているはずです。  
+> 適宜読み替えてください。
+
+| ユーザ名               | パスワード   | 権限                                             | 作成箇所                                                          |
+| ---------------------- | ------------ | ------------------------------------------------ | ----------------------------------------------------------------- |
+| `root`                 | `root`       | 全権限                                           | `docker-compose.yml`                                              |
+| `appname_development`  | `appname`    | `appname_development` データベースに対する全権限 | `containers/mysql/docker-entrypoint-initdb.d/01_create_users.sql` |
+| `appname_test`         | `appname`    | `appname_test*` データベースに対する全権限       | `containers/mysql/docker-entrypoint-initdb.d/01_create_users.sql` |
+
+| データベース名        | 作成箇所                                                              |
+| --------------------- | --------------------------------------------------------------------- |
+| `appname_development` | `containers/mysql/docker-entrypoint-initdb.d/02_create_databases.sql` |
+| `appname_test`        | `containers/mysql/docker-entrypoint-initdb.d/02_create_databases.sql` |
+| `appname_test*`       | -                                                                     |
+
+MySQL は [Docker 公式イメージ](https://hub.docker.com/_/mysql) を使っています。
+
+- AWS RDS Aurora for MySQL へ移行しやすくするため、
+  v8.0 系ではなく v5.7 系を利用します。
+- root パスワードは `docker-compose.yml` の
+  [`MYSQL_ROOT_PASSWORD`](https://github.com/docker-library/docs/tree/5dcedf91847647b9e044268f57862194d7c79ddd/mysql#mysql_root_password)
+  環境変数で設定しています。
+- その他ユーザおよびデータベースは
+  [`docker-entrypoint-init.d`](https://github.com/docker-library/docs/tree/5dcedf91847647b9e044268f57862194d7c79ddd/mysql#initializing-a-fresh-instance)
+  ディレクトリ以下の SQL が初回起動時に自動的に実行されて作成されます。
+
+`config/database.yml` にて、ユーザ名、データベース名に環境名が自動的に
+付与されるよう設定しています。  
+これは意図していないデータベースに間違ってアクセスしてしまわないようにするため、  
+また development 環境で動作している app コンテナからでも
+(test 環境で動作させる) テストを実行しやすくするためです。
+
+上記の通り環境名は `config/database.yml` で付与されるので、
+`docker-compose.yml` の `DATABASE_NAME` および `DATABASE_USERNAME` 環境変数は、
+環境名を除いた部分のみ設定します。  
+(`appname_development` と設定するのではなく、ただ `appname` と設定します)
+
+`appname_test*` データベースは、テストを並列実行する場合に作成/使用される
+(と想定される) データベースです。  
+ただし、このリポジトリでは、テストの並列実行は設定していません。  
+テストの並列実行を実現する gem は複数あり、それぞれに長所短所、
+好みがあるためです。
+
+例えば [parallel_tests](https://github.com/grosser/parallel_tests)
+を利用するならば、 `config/database.yml` の `test` の箇所を以下のように修正する
+ことになると思います。
+
+```yaml
+test:
+  <<: *default
+  database: <%= ENV.fetch('DATABASE_NAME') %>_test<%= ENV['TEST_ENV_NUMBER'] %>
+```
 
 <a name="smtp">
 
