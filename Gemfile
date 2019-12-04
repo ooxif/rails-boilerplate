@@ -26,6 +26,7 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
 
   # Custom gems
+  gem 'erb_lint', require: false
   gem 'rspec-rails', '>= 4.0.0.beta3', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
