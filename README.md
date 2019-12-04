@@ -1,4 +1,4 @@
-# ruby v2.6.4 + Rails v6.0.0 + MySQL + Docker ボイラープレート
+# ruby v2.6.5 + Rails v6.0.0 + MySQL + Docker ボイラープレート
 
 - [環境変数](#env-vars)
 - [使い方](#how-to-use)
