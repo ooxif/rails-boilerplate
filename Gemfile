@@ -26,10 +26,10 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
 
   # Custom gems
-  gem 'rspec'
-  gem 'rspec-rails', '>= 4.0.0.beta2'
-  gem 'rubocop'
-  gem 'rubocop-rails'
+  gem 'rspec-rails', '>= 4.0.0.beta3', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
 end
 
 group :development do
