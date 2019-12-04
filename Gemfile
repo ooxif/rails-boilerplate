@@ -7,15 +7,15 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.4'
+ruby '2.6.5'
 
 # Rails gems
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'jbuilder', '~> 2.7'
 gem 'mysql2', '>= 0.4.4'
-gem 'puma', '~> 3.11'
-gem 'rails', '~> 6.0.0'
-gem 'sass-rails', '~> 5'
+gem 'puma', '~> 4.1'
+gem 'rails', '~> 6.0.1'
+gem 'sass-rails', '=> 6'
 gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 4.0'
 
@@ -26,10 +26,11 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
 
   # Custom gems
-  gem 'rspec'
-  gem 'rspec-rails', '>= 4.0.0.beta2'
-  gem 'rubocop'
-  gem 'rubocop-rails'
+  gem 'erb_lint', require: false
+  gem 'rspec-rails', '>= 4.0.0.beta3', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
 end
 
 group :development do

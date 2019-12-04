@@ -1,4 +1,4 @@
-# ruby v2.6.4 + Rails v6.0.0 + MySQL + Docker ボイラープレート
+# ruby v2.6.5 + Rails v6.0.1 + MySQL + Docker ボイラープレート
 
 - [環境変数](#env-vars)
 - [使い方](#how-to-use)
@@ -9,7 +9,7 @@
 - [プロジェクトの運用について](#rules)
     - [docker-compose.yml の変更および docker-compose.override.yml について](#rules-docker)
     - [RuboCop の設定 .rubocop.yml について](#rules-rubocop)
-    - [Javascript / CSS のリンティングについて](#rules-js-css)
+    - [ERB / Javascript / CSS のリンティングについて](#rules-yarn)
 
 <a name="env-vars">
 
@@ -205,38 +205,47 @@ test:
 RuboCop の設定がプロジェクトの状況に合わない場合にのみ (好みが理由ではなく)、
 .rubocop.yml を変更します。
 
-<a name="rules-js-css">
+なお ERB のリンティングには以下の `yarn` コマンドを利用します。
 
-### Javascript / CSS のリンティングについて
+<a name="rules-yarn">
+
+### ERB / Javascript / CSS のリンティングについて
 
 以下のツールを利用します。
 
+- [erb-lint](https://github.com/Shopify/erb-lint)
+  - .erb のリンティング/フォーマットに利用します。
+  - とりあえずだいたいのリンターを有効にしていますが、プロジェクトの状況に応じて
+    いくつかは無効化してもいいかと思います。
+    (多言語化する予定のないプロジェクトで HardCodedString を無効化する等)
 - [ESLint](https://eslint.org/)
   - .js のリンティング/フォーマットに利用します。
   - 推奨設定 (eslint:recommended plugin:prettier/recommended) を利用します。
+- [prettier](https://prettier.io/)
+  - .json のリンティング/フォーマットに利用します。
+  - デフォルトの設定を利用します。
 - [stylelint](https://stylelint.io/)
   - .css .scss のリンティング/フォーマットに利用します。
   - 推奨設定 (stylelint-prettier/recommended stylelint-config-recommended-scss)
     およびプロパティのA-Z順並び替えルール (order/properties-alphabetical-order)
     を利用します。
-- [prettier](https://prettier.io/)
-  - .json のリンティング/フォーマットに利用します。
-  - デフォルトの設定を利用します。
 
-.css .js .json .scss の lint は `yarn` コマンドで実行します。  
+.css .erb .js .json .scss の lint は `yarn` コマンドで実行します。  
 `yarn` コマンドは `Spring` のような効率化の処理はないので、
 app のシェルに入ってコマンドを実行してもいいですし、
 `docker-compose exec` `docker-compose run` で実行しても変わりはありません。
 
 ```sh
-# 全ての .css .js .json .scss に対して lint を実行します。
+# 全ての .css .erb .js .json .scss に対して lint を実行します。
 yarn lint
 
-# .css .js .json .scss のうち、変更したファイルだけに対して lint を実行します。
+# .css .erb .js .json .scss のうち、変更したファイルだけに対して lint
+# を実行します。
 yarn linc
 
 # 指定したファイルのみ lint します。
 yarn linc:css some-css-file.css
+yarn linc:erb some-erb-file.erb
 yarn linc:js some-js-file.js
 yarn linc:json some-json-file.json
 
