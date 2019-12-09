@@ -28,7 +28,8 @@
 1. このリポジトリを git clone し、そのディレクトリに移動します。
 2. プロジェクト内の全ファイルに対して、 `appname` となっている箇所を
    アプリケーション名に置換します。  
-   `find * -type f | xargs sed -i 's/appname/xxx/g'` で可能です。  
+   `docker run --rm -v "$(pwd):/v" busybox sh -c 'find /v/* -type f | xargs sed -i "s/appname/xxx/g"'`
+   で可能です。  
    (xxx にアプリケーション名を入れます)
 3. `docker-compose run --rm app bundle --path=vendor/bundle` を実行し、
     gem をインストールします。  
