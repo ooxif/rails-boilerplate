@@ -47,7 +47,7 @@
    削除します。
 6. `config/application.example.rb` の設定例を `config/application.rb` に、
    `config/environments/development.example.rb` の設定例を
-   `config/environments/development.rb` に適切にコピーします。  
+   `config/environments/development.rb` の適切な箇所に追記します。  
    その後、これらの 2 つの .example.rb ファイルは削除します。
 7. `docker-compose.override.example.yml` を `docker-compose.override.yml`
    としてコピーします。  

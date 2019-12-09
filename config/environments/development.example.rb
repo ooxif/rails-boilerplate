@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.configure do
+  # 以下の内容を config/environments/development.rb の一番下の `end` の上に
+  # 追記してください。
+
   # docker コンテナ内で動作している場合でも web console
   # にアクセスできるようにする。
   config.web_console.whitelisted_ips = %w[
@@ -19,6 +22,4 @@ Rails.application.configure do
         ActiveSupport::EventedFileUpdateChecker
       end
   end
-
-  # その他の設定は省略
 end

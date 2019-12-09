@@ -4,7 +4,8 @@
 
 module Appname
   class Application < Rails::Application
-    # 省略
+    # 以下の内容を config/application.rb の `config.load_defaults 6.0` の下に
+    # 追記してください。
 
     # タイムゾーンを Asia/Tokyo に統一する。
     # Rails が稼働するサーバ、および MySQL サーバ (Aurora) などのタイムゾーンも
