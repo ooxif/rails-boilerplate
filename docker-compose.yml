@@ -1,49 +1,54 @@
 # 開発環境用。本番環境では使わないこと。
 
-version: '2'
+version: '3.7'
 
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile.development
-    command: >
-        sh -c
-        'bundle --path=vendor/bundle -j4
-        && rm -f tmp/pids/server.pid
-        && bin/rails s -b 0.0.0.0'
+    command: sh -c 'bundle && rm -f tmp/pids/server.pid && rails s -b 0.0.0.0'
+    depends_on:
+      - mailhog
+      - mysql
     environment:
-      BUNDLE_APP_CONFIG:
-      BUNDLE_BIN:
-      BUNDLE_PATH:
-      GEM_HOME:
       DATABASE_HOST: mysql
       DATABASE_NAME: appname
       DATABASE_PASSWORD: appname
       DATABASE_USERNAME: appname
+      HISTFILE: /var/www/appname/log/.ash_history
       RAILS_ENV: development
       SMTP_ADDRESS: mailhog
       SMTP_DOMAIN: mailhog
       SMTP_PORT: 1025
     stdin_open: true
+    tmpfs:
+      - /tmp
     tty: true
     volumes:
-      - .:/var/www/appname
-  data:
-    image: busybox:1.31.0
-    volumes:
-      - mysql:/var/lib/mysql
+      - .:/var/www/appname:cached
+      - bundle:/var/www/appname/vendor/bundle
+      - node_modules:/var/www/appname/node_modules
+      - rails_cache:/var/www/appname/tmp/cache
+      - packs:/var/www/appname/public/packs
+
   mailhog:
     image: mailhog/mailhog:v1.0.0
+
   mysql:
     environment:
+      MYSQL_HISTFILE: /var/www/appname/log/.mysql_history
       MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Tokyo
     image: mysql:5.7.27
     volumes:
       - ./containers/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-    volumes_from:
-      - data
+      - ./log:/var/www/appname/log
+      - mysql:/var/lib/mysql
+
 volumes:
+  bundle:
   mysql:
-    driver: local
+  node_modules:
+  rails_cache:
+  packs:

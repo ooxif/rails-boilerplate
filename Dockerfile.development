@@ -26,11 +26,27 @@ RUN \
 	&& cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
 	\
 	# 実行ユーザ appname を作成。
-	&& mkdir -p /home/appname \
+	&& mkdir -p /home/appname /var/www/appname \
+	&& echo 'IRB.conf[:HISTORY_FILE] = "/var/www/appname/log/.irb_history"' \
+		> /home/appname/.irbrc \
+	&& echo 'IRB.conf[:SAVE_HISTORY] = 10000' >> /home/appname/.irbrc \
 	&& addgroup -S appname \
 	&& adduser -DSh /home/appname -s /sbin/nologin -G appname appname \
 	&& chmod 700 /home/appname \
-	&& chown appname:appname /home/appname
+	\
+	# appname が書き込む場所を予め作成しておく。
+	&& cd /var/www/appname \
+	&& mkdir -p node_modules public/packs tmp/cache vendor/bundle \
+	&& chown -R appname:appname /home/appname /var/www/appname
+
+ENV LANG=C.UTF-8 \
+	GEM_HOME=/var/www/appname/vendor/bundle \
+	BUNDLE_JOBS=4 \
+	BUNDLE_RETRY=3
+ENV BUNDLE_PATH $GEM_HOME
+ENV BUNDLE_APP_CONFIG=$BUNDLE_PATH \
+	BUNDLE_BIN=$BUNDLE_PATH/bin
+ENV PATH /var/www/appname/bin:$BUNDLE_BIN:$PATH
 
 WORKDIR /var/www/appname
 USER appname

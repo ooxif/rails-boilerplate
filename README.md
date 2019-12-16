@@ -25,16 +25,25 @@
 
 ## 使い方
 
+Docker
+([Mac](https://docs.docker.com/docker-for-mac/install/)
+[Windows](https://docs.docker.com/docker-for-windows/install/)
+[Linux](https://docs.docker.com/install/linux/docker-ce/centos/))
+および [Docker Compose](https://docs.docker.com/compose/install/)
+は最新の安定版を利用してください。
+
 1. このリポジトリを git clone し、そのディレクトリに移動します。
 2. プロジェクト内の全ファイルに対して、 `appname` となっている箇所を
    アプリケーション名に置換します。  
    `docker run --rm -v "$(pwd):/v" busybox sh -c 'find /v/* -type f | xargs sed -i "s/appname/xxx/g"'`
    で可能です。  
    (xxx にアプリケーション名を入れます)
-3. `docker-compose run --rm app bundle --path=vendor/bundle` を実行し、
-    gem をインストールします。  
-    vendor ディレクトリおよび .bundle ディレクトリ、 Gemfile.lock ファイルが
-    作成されます。
+3. `docker-compose run --rm app bundle` を実行し、 gem をインストールします。  
+    Gemfile.lock ファイルが作成されます。  
+    > Linux で開発する場合、パーミッションの問題を避けるため、
+    > このコマンドを実行する前に  
+    > `chmod a+w . .gitignore && chmod -R a+w *`  
+    > を実行してください。
 4. `docker-compose run --rm app bundle exec rails new . -G -s -d mysql`
     を実行し、 Rails プロジェクトを初期化します。  
     なお Rails v6.0.0 では、 -G オプションを指定しても .gitignore に内容が
@@ -43,8 +52,8 @@
 5. `docker-compose run --rm app bundle exec rails g rspec:install` で rspec を
    初期化します。  
    spec ディレクトリが作成されます。  
-   なお今後 test ディレクトリは使用しないため、 `rm -rf test` でディレクトリを
-   削除します。
+   なお今後 test ディレクトリは使用しないため、 test ディレクトリは
+   削除してください。
 6. `config/application.example.rb` の設定例を `config/application.rb` に、
    `config/environments/development.example.rb` の設定例を
    `config/environments/development.rb` の適切な箇所に追記します。  
@@ -58,7 +67,10 @@
 9. http://localhost:3000 にアクセスし Rails の画面が表示されたら
    動作確認完了です。
 10. `.git` ディレクトリを削除し、新たに git を初期化します。  
-   `rm -rf .git && git init .` で可能です。
+    `rm -rf .git && git init .` で可能です。  
+    > Windows PowerShell なら  
+    > `Remove-Item -Recurse -Force .git; git init .`  
+    > です。
 11. `git add .` `git commit -m 'init'` し、初期化時の状態をコミットします。
 
 <a name="rails-commands">
@@ -66,17 +78,19 @@
 ## rails / rubocop / rspec などのコマンドの実行方法について
 
 コンテナが起動中の場合は、 `docker-compose exec app sh` コマンドを実行して
-app のシェルに入り、その中で `bin/rails` `bin/rubocop` などのコマンドを
-実行します。
+app のシェルに入り、その中で `rails` `rubocop` などのコマンドを実行します。
 
 なお、わざわざ app のシェルに入らなくても、コンテナが起動中であれば    
-`docker-compose exec app bin/rails ...`  
+`docker-compose exec app rails ...`  
 コンテナが停止中であれば  
-`docker-compose run --rm app bin/rails ...`  
+`docker-compose run --rm app rails ...`  
 のように docker-compose exec もしくは docker-compose run コマンドを利用
 することで各種コマンドを実行することは可能ですが、
 `Spring` による連続実行の速度改善の恩恵を受けるためにも、
 app のシェルに入ったほうが作業効率は良いです。
+
+> bin に PATH が最優先で通っているため、 bin/rails とせず rails とするだけで
+> bin/rails が実行されます。
 
 <a name="mysql-cli">
 
